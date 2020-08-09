@@ -1,8 +1,7 @@
-//Scale pixel coordinates in [0,1] interval
-function scaledPixelCoordinates(x,y,w,h){
+function scaledPixelCoordinates(x,y,ZOOM_FACTOR,OFFSET={x:0,y:0}){
     return {
-        x: x / w,
-        y: y / h
+        x: x / ZOOM_FACTOR - OFFSET.x,
+        y: y / ZOOM_FACTOR - OFFSET.y
     };
 }
 
@@ -20,42 +19,56 @@ function mulComplex(A,B){
 function isInMandelbrotSet(C, ITERATIONS, ESCAPE) {
     let Zprevious = {x:C.x,y:C.y};
     let Z = {x:0, y:0};
-    for(var i = 0; i < ITERATIONS; i++) {
+    for(let i = 0; i < ITERATIONS; i++) {
         Z = addComplex(mulComplex(Zprevious, Zprevious),C);
-        Zprevious = {x: Z.x, y:Z.y};
         if (Z.x*Z.y >= ESCAPE){
             return false;
         }
+        Zprevious = {x: Z.x, y:Z.y};
     }
     return true;
 }
 
-function drawMandelbrot(WIDTH,HEIGHT,ITERATIONS,ESCAPE,canvas){
+function setPixel(x,y,img,color){
+    let off = (y * img.width + x) * 4;
+    img.data[off] = color.r;
+    img.data[off+1] = color.g;
+    img.data[off+2] = color.b;
+    img.data[off+3] = color.a;
+}
+
+function drawMandelbrot(WIDTH,HEIGHT,ZOOM_FACTOR,ITERATIONS,ESCAPE,OFFSET,canvas){
     let ctx = canvas.getContext("2d");
-    ctx.fillStyle = "rgba(255, 255, 255, 1.0)";
+    let colorIn =  {r:0,g:0,b:0,a:255};
+    let img = ctx.createImageData(WIDTH,HEIGHT);
     for(let x=0; x < WIDTH; x++) {
         for(let y=0; y < HEIGHT; y++) {
-            if(isInMandelbrotSet(scaledPixelCoordinates(x,y,WIDTH,HEIGHT),ITERATIONS,ESCAPE)) {
-                ctx.fillRect(x,y,1,1);
+            if(isInMandelbrotSet(scaledPixelCoordinates(x,y,ZOOM_FACTOR,OFFSET),ITERATIONS,ESCAPE)) {
+                setPixel(x,y,img,colorIn);
             }
         } 
     }
-}
-
-function resetCanvas(canvas){
-    let ctx = canvas.getContext("2d");
-    ctx.fillStyle = "rgba(0, 0, 0, 1.0)";
-    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.putImageData(img,0,0);
 }
 
 window.onload = () => {
     const canvas = document.getElementById("mainCanvas");
-    const HEIGHT = 600;
-    const WIDTH = 600;
-    const ESCAPE = 5; //For divergency check
-    const ITERATIONS = 100;
+    const HEIGHT = 1000;
+    const WIDTH = 1000;
+    let ESCAPE = 10; //For divergency check
+    let ITERATIONS = 100;
+    let ZOOM_FACTOR = 2000;
+    let OFFSET = {x:1.1,y:0.4};
     canvas.width = WIDTH;
     canvas.height = HEIGHT;
-    resetCanvas(canvas);
-    drawMandelbrot(WIDTH,HEIGHT,ITERATIONS,ESCAPE,canvas);
+    let count = 0;
+    let draw = () =>{
+        drawMandelbrot(WIDTH,HEIGHT,ZOOM_FACTOR,ITERATIONS,ESCAPE,OFFSET,canvas);
+        ZOOM_FACTOR += 50;
+        if(count++ % 5 == 0){
+            ITERATIONS += 5;
+        }
+    };
+    draw();
+    //setInterval(draw, 50);
 };
