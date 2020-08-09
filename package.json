@@ -1,0 +1,27 @@
+{
+  "name": "mandelbrot-electron",
+  "version": "1.0.0",
+  "description": "Mandelbrot set with ElectronJS",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fbrossar25/mandelbrot-electron.git"
+  },
+  "keywords": [
+    "mandelbrot",
+    "fractal",
+    "electronjs"
+  ],
+  "author": "BROSSARD Florian",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/fbrossar25/mandelbrot-electron/issues"
+  },
+  "homepage": "https://github.com/fbrossar25/mandelbrot-electron#readme",
+  "devDependencies": {
+    "electron": "^9.2.0"
+  }
+}
