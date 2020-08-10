@@ -1,0 +1,102 @@
+#mainCanvas {
+  border: 1px solid black;
+}
+
+/* The side navigation menu */
+.sidenav {
+  height: 100%; /* 100% Full-height */
+  width: 0; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Stay on top */
+  top: 0; /* Stay at the top */
+  left: 0;
+  background-color: #171717; /* Black*/
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 60px; /* Place content 60px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+  white-space: nowrap;
+}
+
+/* The navigation menu links */
+.sidenav a {
+  text-decoration: none;
+  transition: 0.3s;
+  color: #b0b0b0;
+  font-size: 25px;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover {
+  color: #303030;
+}
+
+.sidenav .form-group{
+  margin-left: 8px;
+}
+
+.sidenav input{
+  max-width: 4em;
+  vertical-align: text-bottom;
+}
+
+.sidenav .group-name{
+  margin-left: 8px;
+  white-space: nowrap;
+  color: #b0b0b0;
+  font-size: 25px;
+}
+
+.sidenav label{
+  margin-left: 8px;
+  white-space: nowrap;
+  color: #b0b0b0;
+  font-size: 25px;
+}
+
+/* Position and style the close button (top right corner) */
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+  padding: 0px 10px 0px 10px;
+}
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+  transition: margin-left .5s;
+  padding: 20px;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+  .sidenav {padding-top: 15px;}
+  .sidenav a {font-size: 18px;}
+}
+
+.btn {
+  border: none;
+  background-color: inherit;
+  padding: 14px 28px;
+  font-size: 16px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+#btOpen{
+  left: 0;
+  top: 0;
+  color: #303030;
+  background-color: #b7b7b7;
+  padding: 1em;
+}
+
+#btOpen:hover{
+  background-color: #303030;
+  color: #b7b7b7;
+}
+
+/* On mouse-over */
+.btn:hover {background: #b7b7b7;}
+

@@ -38,6 +38,8 @@ function setPixel(x,y,img,color){
 }
 
 function drawMandelbrot(WIDTH,HEIGHT,ZOOM_FACTOR,ITERATIONS,ESCAPE,OFFSET,canvas){
+    canvas.width = WIDTH;
+    canvas.height = HEIGHT;
     let ctx = canvas.getContext("2d");
     let colorIn =  {r:0,g:0,b:0,a:255};
     let img = ctx.createImageData(WIDTH,HEIGHT);
@@ -50,25 +52,3 @@ function drawMandelbrot(WIDTH,HEIGHT,ZOOM_FACTOR,ITERATIONS,ESCAPE,OFFSET,canvas
     }
     ctx.putImageData(img,0,0);
 }
-
-window.onload = () => {
-    const canvas = document.getElementById("mainCanvas");
-    const HEIGHT = 1000;
-    const WIDTH = 1000;
-    let ESCAPE = 10; //For divergency check
-    let ITERATIONS = 100;
-    let ZOOM_FACTOR = 2000;
-    let OFFSET = {x:1.1,y:0.4};
-    canvas.width = WIDTH;
-    canvas.height = HEIGHT;
-    let count = 0;
-    let draw = () =>{
-        drawMandelbrot(WIDTH,HEIGHT,ZOOM_FACTOR,ITERATIONS,ESCAPE,OFFSET,canvas);
-        ZOOM_FACTOR += 50;
-        if(count++ % 5 == 0){
-            ITERATIONS += 5;
-        }
-    };
-    draw();
-    //setInterval(draw, 50);
-};

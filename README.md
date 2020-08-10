@@ -3,7 +3,12 @@ npm i
 npm start
 
 # TODO
-- [ ] Zoom
 - [ ] Colors from iterations
-- [ ] Controls to affect mandelbrot set (number of iterations, escape paramtere, etc...)
+  - [ ] Grayscale
+  - [ ] HSl
+  - [x] Black & White
+- [x] Controls to affect mandelbrot set
+  - [x] Zoom
+  - [x] Move
+  - [x] Change parameters
 - [ ] Distribution packages to run everywhere

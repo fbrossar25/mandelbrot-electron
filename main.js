@@ -6,7 +6,9 @@ function createWindow () {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.js'),
+      enableRemoteModule: true,
+      nodeIntegration: true //enable uses of require in index.html for example
     }
   });
 
@@ -14,8 +16,10 @@ function createWindow () {
   mainWindow.loadFile('index.html');
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  mainWindow.setMenu(null);
   mainWindow.maximize();
+  mainWindow.openDevTools();
+  global.mainWindow = mainWindow;
 }
 
 // This method will be called when Electron has finished

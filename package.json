@@ -23,5 +23,9 @@
   "homepage": "https://github.com/fbrossar25/mandelbrot-electron#readme",
   "devDependencies": {
     "electron": "^9.2.0"
+  },
+  "dependencies": {
+    "electron-localshortcut": "^3.2.1",
+    "mousetrap": "^1.6.5"
   }
 }
