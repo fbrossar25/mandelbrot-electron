@@ -37,12 +37,16 @@
       <label for="inputY">Y :</label>
       <input type="number" value="" id="inputY" name="inputY"/>
     </div>
-    <span for="color" class="group-name">Color :</label>
+    <span class="group-name">Color :</label>
     <select id="selectColor" name="color">
       <option value="HSV">HSV Colors</option>
+      <option value="HSL">HSL Colors</option>
       <option value="BW">Black & White</option>
       <option value="GRAYSCALE">Grayscale</option>
     </select>
+    <br/>
+    <span class="group-name">Live draw :</label>
+    <input type="checkbox" id="checkLive" checked/>
     <br/>
     <span class="group-name">Escape :</span>
     <input type="number" value="" min="1" step="0.1" id="inputEscape"/>

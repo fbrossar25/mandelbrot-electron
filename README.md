@@ -9,8 +9,8 @@ npm start
 # TODO
 - [ ] Colors from iterations
   - [x] Grayscale
-  - [ ] HSL
-  - [ ] HSV
+  - [x] HSL
+  - [x] HSV
   - [x] Black & White
 - [x] Controls to affect mandelbrot set
   - [x] Zoom
@@ -20,4 +20,7 @@ npm start
   - [ ] Formula (possible ?)
   - [x] Pixels manipulation instead of fillRect
   - [ ] Redraw only what's needed when moving on X and Y axis
+  - [ ] Multithreading
+- [ ] Save image
+- [x] Make live draw optional (draw immediately at each modification)
 - [ ] Distribution packages (at least Windows)

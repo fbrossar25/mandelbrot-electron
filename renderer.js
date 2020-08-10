@@ -17,27 +17,38 @@ const defaultConfig = {
     }
 };
 
+let configInit = false;
+let liveDraw = true;
+
 const currentConfig = {};
 
-function draw(){
+function draw(fromDrawButton=false){
     refreshControls();
-    drawMandelbrot(
-        currentConfig.WIDTH,
-        currentConfig.HEIGHT,
-        currentConfig.ZOOM_FACTOR,
-        currentConfig.ITERATIONS,
-        currentConfig.ESCAPE,
-        currentConfig.OFFSET,
-        currentConfig.COLORS,
-        currentConfig.canvas
-    );
+    if(liveDraw || fromDrawButton){
+        drawMandelbrot(
+            currentConfig.WIDTH,
+            currentConfig.HEIGHT,
+            currentConfig.ZOOM_FACTOR,
+            currentConfig.ITERATIONS,
+            currentConfig.ESCAPE,
+            currentConfig.OFFSET,
+            currentConfig.COLORS,
+            currentConfig.canvas
+        );
+    }
 }
 
 function reset(){
+    let saveColors = currentConfig.COLORS;
     Object.assign(currentConfig, defaultConfig)
     //Doing this to prevent change of defaultConfig.OFFSET
     currentConfig.OFFSET = Object.assign({}, defaultConfig.OFFSET);
-    currentConfig.COLORS = Object.assign({}, defaultConfig.COLORS);
+    if(!configInit){
+        currentConfig.COLORS = Object.assign({}, defaultConfig.COLORS);
+        configInit = true;
+    }else{
+        currentConfig.COLORS = saveColors;
+    }
     draw();
 }
 
@@ -109,6 +120,7 @@ function refreshControls(){
     getEID("inputY").value = currentConfig.OFFSET.y;
     getEID("inputEscape").value = currentConfig.ESCAPE;
     getEID("selectColor").value = currentConfig.COLORS.type;
+    getEID("checkLive").value = liveDraw;
 }
 
 getEID("btClose").addEventListener("click", () =>{
@@ -119,12 +131,8 @@ getEID("btOpen").addEventListener("click", () =>{
     openNav();
 });
 
-getEID("btDraw").addEventListener("click", () =>{
-    openNav();
-});
-
 getEID("btDraw").addEventListener("click", () => {
-    draw();
+    draw(true);
 });
 
 getEID("btReset").addEventListener("click", () => {
@@ -188,11 +196,21 @@ getEID("selectColor").addEventListener("change", (evt) => {
         currentConfig.COLORS.type = 'HSV';
     }else if(evt.target.value === 'GRAYSCALE'){
         currentConfig.COLORS.type = 'GRAYSCALE';
-    }else{
+    }else if(evt.target.value === 'HSL'){
+        currentConfig.COLORS.type = 'HSL';
+    } else {
         //Prevent unwanted values
         currentConfig.COLORS.type = 'BW';
     }
     draw();
+});
+
+getEID("checkLive").addEventListener("change", (evt) => {
+    if(evt.target.checked){
+        liveDraw = true;
+    }else{
+        liveDraw = false;
+    }
 });
 
 window.onload = () => {
@@ -219,4 +237,4 @@ Mousetrap.bind( ['up','z','w'], moveUp);
 
 Mousetrap.bind( ['down','s'], moveDown);
 
-Mousetrap.bind(['left','q','a'], moveLeft);
+Mousetrap.bind( ['left','q','a'], moveLeft);
