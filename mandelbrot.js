@@ -50,14 +50,53 @@ function grayscaleColor(n, max){
     return {r:gray,g:gray,b:gray,a:255};
 }
 
-function rgbColor(n, max){
-    return bwColor(n,max);
+/**
+* Converts an HSV color value to RGB. Conversion formula
+* adapted from http://en.wikipedia.org/wiki/HSV_color_space.
+* Assumes h, s, and v are contained in the set [0, 1] and
+* returns r, g, and b in the set [0, 255].
+* Credits to Github mjackson : https://gist.github.com/mjackson
+*
+* @param   Number  h       The hue
+* @param   Number  s       The saturation
+* @param   Number  v       The value
+* @return  any             The RGB representation
+*/
+function hsvToRgb(h, s, v) {
+    var r, g, b;
+    
+    var i = Math.floor(h * 6);
+    var f = h * 6 - i;
+    var p = v * (1 - s);
+    var q = v * (1 - f * s);
+    var t = v * (1 - (1 - f) * s);
+    
+    switch (i % 6) {
+        case 0: r = v, g = t, b = p; break;
+        case 1: r = q, g = v, b = p; break;
+        case 2: r = p, g = v, b = t; break;
+        case 3: r = p, g = q, b = v; break;
+        case 4: r = t, g = p, b = v; break;
+        case 5: r = v, g = p, b = q; break;
+    }
+    
+    return {r:r * 255, g:g * 255, b:b * 255, a:255};
 }
 
 function getColorFunction(COLORS){
-    if(COLORS === 'RGB'){
-        return rgbColor;
-    }else if(COLORS === 'GRAYSCALE'){
+    if(COLORS.type === 'HSV'){
+        const saturation = typeof COLORS.saturation === 'number'
+            && COLORS.saturation <= 1.0
+            && COLORS.saturation >= 0.0
+            ? COLORS.saturation
+            : 0.5;
+        const value = typeof COLORS.value === 'number'
+            && COLORS.value <= 1.0
+            && COLORS.value >= 0.0
+            ? COLORS.value
+            : 0.5;
+        return (n,max) => hsvToRgb(n/max,saturation,value);
+    }else if(COLORS.type === 'GRAYSCALE'){
         return grayscaleColor;
     }else{
         return bwColor;

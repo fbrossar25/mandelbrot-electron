@@ -10,7 +10,11 @@ const defaultConfig = {
     ITERATIONS: 100,
     ZOOM_FACTOR: 200,
     OFFSET: {x:1.5,y:2.0},
-    COLORS: 'BW'
+    COLORS: {
+        type: 'BW', //BW, GRAYSCALE, HSV
+        saturation: 0.5,
+        value: 0.5 //Value for HSV, Lightness for HSL
+    }
 };
 
 const currentConfig = {};
@@ -33,6 +37,7 @@ function reset(){
     Object.assign(currentConfig, defaultConfig)
     //Doing this to prevent change of defaultConfig.OFFSET
     currentConfig.OFFSET = Object.assign({}, defaultConfig.OFFSET);
+    currentConfig.COLORS = Object.assign({}, defaultConfig.COLORS);
     draw();
 }
 
@@ -103,7 +108,7 @@ function refreshControls(){
     getEID("inputX").value = currentConfig.OFFSET.x;
     getEID("inputY").value = currentConfig.OFFSET.y;
     getEID("inputEscape").value = currentConfig.ESCAPE;
-    getEID("selectColor").value = currentConfig.COLORS;
+    getEID("selectColor").value = currentConfig.COLORS.type;
 }
 
 getEID("btClose").addEventListener("click", () =>{
@@ -179,13 +184,13 @@ getEID("inputEscape").addEventListener("change", (evt) => {
 });
 
 getEID("selectColor").addEventListener("change", (evt) => {
-    if(evt.target.value === 'RGB'){
-        currentConfig.COLORS = 'RGB';
+    if(evt.target.value === 'HSV'){
+        currentConfig.COLORS.type = 'HSV';
     }else if(evt.target.value === 'GRAYSCALE'){
-        currentConfig.COLORS = 'GRAYSCALE';
+        currentConfig.COLORS.type = 'GRAYSCALE';
     }else{
         //Prevent unwanted values
-        currentConfig.COLORS = 'BW';
+        currentConfig.COLORS.type = 'BW';
     }
     draw();
 });
