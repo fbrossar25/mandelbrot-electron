@@ -22,11 +22,11 @@ function isInMandelbrotSet(C, ITERATIONS, ESCAPE) {
     for(let i = 0; i < ITERATIONS; i++) {
         Z = addComplex(mulComplex(Zprevious, Zprevious),C);
         if (Z.x*Z.y >= ESCAPE){
-            return false;
+            return i;
         }
         Zprevious = {x: Z.x, y:Z.y};
     }
-    return true;
+    return ITERATIONS;
 }
 
 function setPixel(x,y,img,color){
@@ -37,17 +37,43 @@ function setPixel(x,y,img,color){
     img.data[off+3] = color.a;
 }
 
-function drawMandelbrot(WIDTH,HEIGHT,ZOOM_FACTOR,ITERATIONS,ESCAPE,OFFSET,canvas){
+function bwColor(n, max){
+    if(n < max){
+        return {r:255,g:255,b:255,a:255};
+    }else{
+        return {r:0,g:0,b:0,a:255};
+    }
+}
+
+function grayscaleColor(n, max){
+    const gray = Math.floor((1.0 - (n/max)) * 255);
+    return {r:gray,g:gray,b:gray,a:255};
+}
+
+function rgbColor(n, max){
+    return bwColor(n,max);
+}
+
+function getColorFunction(COLORS){
+    if(COLORS === 'RGB'){
+        return rgbColor;
+    }else if(COLORS === 'GRAYSCALE'){
+        return grayscaleColor;
+    }else{
+        return bwColor;
+    }
+}
+
+function drawMandelbrot(WIDTH,HEIGHT,ZOOM_FACTOR,ITERATIONS,ESCAPE,OFFSET,COLORS,canvas){
     canvas.width = WIDTH;
     canvas.height = HEIGHT;
     let ctx = canvas.getContext("2d");
-    let colorIn =  {r:0,g:0,b:0,a:255};
+    let colorFct = getColorFunction(COLORS);
     let img = ctx.createImageData(WIDTH,HEIGHT);
     for(let x=0; x < WIDTH; x++) {
         for(let y=0; y < HEIGHT; y++) {
-            if(isInMandelbrotSet(scaledPixelCoordinates(x,y,ZOOM_FACTOR,OFFSET),ITERATIONS,ESCAPE)) {
-                setPixel(x,y,img,colorIn);
-            }
+            let iteration = isInMandelbrotSet(scaledPixelCoordinates(x,y,ZOOM_FACTOR,OFFSET),ITERATIONS,ESCAPE);
+            setPixel(x,y,img,colorFct(iteration,ITERATIONS));
         } 
     }
     ctx.putImageData(img,0,0);

@@ -9,7 +9,8 @@ const defaultConfig = {
     ESCAPE: 5, //For divergency check
     ITERATIONS: 100,
     ZOOM_FACTOR: 200,
-    OFFSET: {x:1.5,y:2.0}
+    OFFSET: {x:1.5,y:2.0},
+    COLORS: 'BW'
 };
 
 const currentConfig = {};
@@ -23,6 +24,7 @@ function draw(){
         currentConfig.ITERATIONS,
         currentConfig.ESCAPE,
         currentConfig.OFFSET,
+        currentConfig.COLORS,
         currentConfig.canvas
     );
 }
@@ -101,6 +103,7 @@ function refreshControls(){
     getEID("inputX").value = currentConfig.OFFSET.x;
     getEID("inputY").value = currentConfig.OFFSET.y;
     getEID("inputEscape").value = currentConfig.ESCAPE;
+    getEID("selectColor").value = currentConfig.COLORS;
 }
 
 getEID("btClose").addEventListener("click", () =>{
@@ -173,6 +176,18 @@ getEID("inputEscape").addEventListener("change", (evt) => {
         evt.target.value = currentConfig.ESCAPE;
         return false;
     }
+});
+
+getEID("selectColor").addEventListener("change", (evt) => {
+    if(evt.target.value === 'RGB'){
+        currentConfig.COLORS = 'RGB';
+    }else if(evt.target.value === 'GRAYSCALE'){
+        currentConfig.COLORS = 'GRAYSCALE';
+    }else{
+        //Prevent unwanted values
+        currentConfig.COLORS = 'BW';
+    }
+    draw();
 });
 
 window.onload = () => {
