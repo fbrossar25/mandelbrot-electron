@@ -23,9 +23,15 @@ function checkDivergency(A, ESCAPE){
 function isInMandelbrotSet(C, ITERATIONS, ESCAPE) {
     let Zprevious = {x:C.x,y:C.y};
     let Z = {x:0, y:0};
+    let x2, y2;
     for(let i = 0; i < ITERATIONS; i++) {
-        Z = addComplex(mulComplex(Zprevious, Zprevious),C);
-        if (checkDivergency(Z, ESCAPE)){
+        x2 = Zprevious.x * Zprevious.x;
+        y2 = Zprevious.y * Zprevious.y;
+        Z = {
+            x: x2 - y2 + C.x,
+            y: 2 * Zprevious.x * Zprevious.y + C.y
+        };
+        if(x2 + y2 > ESCAPE){
             return i;
         }
         Zprevious = {x: Z.x, y:Z.y};
