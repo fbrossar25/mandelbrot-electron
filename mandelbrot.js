@@ -35,6 +35,10 @@ function isInMandelbrotSet(C, ITERATIONS, ESCAPE) {
 
 function setPixel(x,y,img,color){
     let off = (y * img.width + x) * 4;
+    setPixel(off, img, color);
+}
+
+function setPixel(off, img, color){
     img.data[off] = color.r;
     img.data[off+1] = color.g;
     img.data[off+2] = color.b;
@@ -138,18 +142,19 @@ function drawMandelbrot(WIDTH,HEIGHT,ZOOM_FACTOR,ITERATIONS,ESCAPE,OFFSET,COLORS
     let ctx = canvas.getContext("2d");
     let colorFct = getColorFunction(COLORS);
     let img = ctx.createImageData(WIDTH,HEIGHT);
-    for(let y=0; y < HEIGHT; y++) {
-        for(let x=0; x < WIDTH; x++) {
-            //performance.mark('mandelbrot-begin');
-            let iteration = isInMandelbrotSet(scaledPixelCoordinates(x,y,ZOOM_FACTOR,OFFSET),ITERATIONS,ESCAPE);
-            //performance.mark('mandelbrot-end');
-            //performance.measure('mandelbrot', 'mandelbrot-begin', 'mandelbrot-end');
+    let nPixels = WIDTH*HEIGHT;
+    for(let i=0; i < nPixels; i++) {
+        let x = i%WIDTH;
+        let y = Math.floor(i/WIDTH);
+        //performance.mark('mandelbrot-begin');
+        let iteration = isInMandelbrotSet(scaledPixelCoordinates(x,y,ZOOM_FACTOR,OFFSET),ITERATIONS,ESCAPE);
+        //performance.mark('mandelbrot-end');
+        //performance.measure('mandelbrot', 'mandelbrot-begin', 'mandelbrot-end');
 
-            //performance.mark('pixel-begin');
-            setPixel(x,y,img,colorFct(iteration,ITERATIONS));
-            //performance.mark('pixel-end');
-            //performance.measure('pixel', 'pixel-begin', 'pixel-end');
-        }
+        //performance.mark('pixel-begin');
+        setPixel(i*4,img,colorFct(iteration,ITERATIONS));
+        //performance.mark('pixel-end');
+        //performance.measure('pixel', 'pixel-begin', 'pixel-end');
     }
     ctx.putImageData(img,0,0);
     performance.mark('draw-end');
