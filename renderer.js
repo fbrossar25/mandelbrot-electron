@@ -2,16 +2,16 @@ const remote = require('electron').remote;
 const mainWindow = remote.getGlobal('mainWindow');
 const Mousetrap = require('mousetrap');
 
-const defaultConfig = {
+const defaultConfig = { //0.42s whit single loop
     canvas: getEID("mainCanvas"),
-    HEIGHT: 500,
-    WIDTH: 500,
-    ESCAPE: 2*2, //For divergency check
-    ITERATIONS: 100,
-    ZOOM_FACTOR: 200,
-    OFFSET: {x:1.5,y:2.0},
+    HEIGHT: 2000,
+    WIDTH: 2000,
+    ESCAPE: 4, //For divergency check
+    ITERATIONS: 125,
+    ZOOM_FACTOR: 6500,
+    OFFSET: {x:0.55,y:0.7},
     COLORS: {
-        type: 'BW', //BW, GRAYSCALE, HSV
+        type: 'HSV', //BW, GRAYSCALE, HSV
         saturation: 0.5,
         value: 0.5 //Value for HSV, Lightness for HSL
     }
