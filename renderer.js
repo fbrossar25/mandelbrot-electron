@@ -1,30 +1,48 @@
 const remote = require('electron').remote;
 const mainWindow = remote.getGlobal('mainWindow');
 const Mousetrap = require('mousetrap');
+const COLORS_TYPES = ['BW', 'GRAYSCALE', 'HSV', 'HSL'];
 
 const defaultConfig = { //0.42s whit single loop
     canvas: getEID("mainCanvas"),
-    HEIGHT: 2000,
-    WIDTH: 2000,
+    HEIGHT: 800,
+    WIDTH: 800,
     ESCAPE: 4, //For divergency check
-    ITERATIONS: 125,
-    ZOOM_FACTOR: 6500,
-    OFFSET: {x:0.55,y:0.7},
+    ITERATIONS: 5,
+    ZOOM_FACTOR: 1,
+    OFFSET: {x:0,y:0},
     COLORS: {
-        type: 'HSV', //BW, GRAYSCALE, HSV
+        type: 'GRAYSCALE',
         saturation: 0.5,
         value: 0.5 //Value for HSV, Lightness for HSL
-    }
+    },
+    DRAW_CENTER: false,
+    LIVE_DRAW: true
 };
 
 let configInit = false;
-let liveDraw = true;
 
 const currentConfig = {};
 
+function drawCenter(){
+    let ctx = currentConfig.canvas.getContext("2d");
+    let width = currentConfig.canvas.width;
+    let height = currentConfig.canvas.height;
+    let length = Math.floor(Math.min(width, height) / 20);
+    let x = width / 2;
+    let y = height / 2;
+    ctx.strokeStyle = "#FF0000";
+    ctx.moveTo(x,y-length);
+    ctx.lineTo(x,y+length);
+    ctx.stroke();
+    ctx.moveTo(x-length, y);
+    ctx.lineTo(x+length, y);
+    ctx.stroke();
+}
+
 function draw(fromDrawButton=false){
     refreshControls();
-    if(liveDraw || fromDrawButton){
+    if(currentConfig.LIVE_DRAW || fromDrawButton){
         drawMandelbrot(
             currentConfig.WIDTH,
             currentConfig.HEIGHT,
@@ -36,10 +54,14 @@ function draw(fromDrawButton=false){
             currentConfig.canvas
         );
     }
+    if(currentConfig.DRAW_CENTER){
+        drawCenter();
+    }
 }
 
 function reset(){
     let saveColors = currentConfig.COLORS;
+    let saveLiveDraw = currentConfig.LIVE_DRAW;
     Object.assign(currentConfig, defaultConfig)
     //Doing this to prevent change of defaultConfig.OFFSET
     currentConfig.OFFSET = Object.assign({}, defaultConfig.OFFSET);
@@ -47,7 +69,9 @@ function reset(){
         currentConfig.COLORS = Object.assign({}, defaultConfig.COLORS);
         configInit = true;
     }else{
+        //Prevent reset here
         currentConfig.COLORS = saveColors;
+        currentConfig.LIVE_DRAW = saveLiveDraw;
     }
     draw();
 }
@@ -74,12 +98,12 @@ function closeNav() {
 }
 
 function zoomIn(){
-    currentConfig.ZOOM_FACTOR += 50;
+    currentConfig.ZOOM_FACTOR += 0.01;
     draw();
 }
 
 function zoomOut(){
-    currentConfig.ZOOM_FACTOR -= 50;
+    currentConfig.ZOOM_FACTOR -= 0.01;
     if(currentConfig.ZOOM_FACTOR < 1){
         currentConfig.ZOOM_FACTOR = 1;
     }
@@ -107,12 +131,12 @@ function moveRight(){
 }
 
 function moreIterations(){
-    currentConfig.ITERATIONS += 10;
+    currentConfig.ITERATIONS += 1;
     draw();
 }
 
 function lessIterations(){
-    currentConfig.ITERATIONS -= 10;
+    currentConfig.ITERATIONS -= 1;
     if(currentConfig.ITERATIONS < 1){
         currentConfig.ITERATIONS = 1;
     }
@@ -126,7 +150,7 @@ function refreshControls(){
     getEID("inputY").value = currentConfig.OFFSET.y;
     getEID("inputEscape").value = currentConfig.ESCAPE;
     getEID("selectColor").value = currentConfig.COLORS.type;
-    getEID("checkLive").value = liveDraw;
+    getEID("checkLive").value = currentConfig.LIVE_DRAW;
 }
 
 getEID("btClose").addEventListener("click", () =>{
@@ -198,26 +222,32 @@ getEID("inputEscape").addEventListener("change", (evt) => {
 });
 
 getEID("selectColor").addEventListener("change", (evt) => {
-    if(evt.target.value === 'HSV'){
-        currentConfig.COLORS.type = 'HSV';
-    }else if(evt.target.value === 'GRAYSCALE'){
-        currentConfig.COLORS.type = 'GRAYSCALE';
-    }else if(evt.target.value === 'HSL'){
-        currentConfig.COLORS.type = 'HSL';
-    } else {
+    if(COLORS_TYPES.includes(evt.target.value)){
+        currentConfig.COLORS.type = evt.target.value;
+    }else {
         //Prevent unwanted values
-        currentConfig.COLORS.type = 'BW';
+        currentConfig.COLORS.type = COLORS_TYPES[0];
     }
     draw();
 });
 
 getEID("checkLive").addEventListener("change", (evt) => {
     if(evt.target.checked){
-        liveDraw = true;
+        currentConfig.LIVE_DRAW = true;
     }else{
-        liveDraw = false;
+        currentConfig.LIVE_DRAW = false;
     }
 });
+
+getEID("checkCenter").addEventListener("change", (evt) => {
+    if(evt.target.checked){
+        currentConfig.DRAW_CENTER = true;
+    }else{
+        currentConfig.DRAW_CENTER = false;
+    }
+    draw();
+});
+
 
 window.onload = () => {
     reset();

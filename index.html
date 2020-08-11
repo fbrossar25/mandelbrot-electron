@@ -21,7 +21,7 @@
     <span class="group-name">Zoom :</span>
     <div class="form-group form-inline">
       <a href="#" class="btn" id="btZoomIn">&plus;</a>
-      <input type="number" value="" id="inputZoom" min="1"/>
+      <input type="number" value="" id="inputZoom" min="1" step="0.01"/>
       <a href="#" class="btn" id="btZoomOut">&minus;</a>
     </div>
     <span class="group-name">Iterations :</span>
@@ -33,16 +33,16 @@
     <span class="group-name">Offset :</span>
     <div class="form-group form-inline">
       <label for="inputX">X :</label>
-      <input type="number" value="" id="inputX" name="inputX"/>
+      <input type="number" value="" id="inputX" name="inputX" step="0.1"/>
       <label for="inputY">Y :</label>
-      <input type="number" value="" id="inputY" name="inputY"/>
+      <input type="number" value="" id="inputY" name="inputY" step="0.1"/>
     </div>
     <span class="group-name">Color :</label>
     <select id="selectColor" name="color">
+      <option value="BW" selected>Black & White</option>
+      <option value="GRAYSCALE">Grayscale</option>
       <option value="HSV">HSV Colors</option>
       <option value="HSL">HSL Colors</option>
-      <option value="BW">Black & White</option>
-      <option value="GRAYSCALE">Grayscale</option>
     </select>
     <br/>
     <span class="group-name">Live draw :</label>
@@ -50,9 +50,12 @@
     <br/>
     <span class="group-name">Escape :</span>
     <input type="number" value="" min="1" step="0.1" id="inputEscape"/>
+    <br/>
+    <span class="group-name">Draw center :</span>
+    <input type="checkbox" id="checkCenter"/>
   </div>
   
-  <a id="btOpen" class="btn">open</a>
+  <a id="btOpen" class="btn">Config</a>
   
   <!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
   <main id="main">

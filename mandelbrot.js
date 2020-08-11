@@ -5,6 +5,14 @@ function scaledPixelCoordinates(x,y,ZOOM_FACTOR,OFFSET={x:0,y:0}){
     };
 }
 
+function scaledPxielCoordinatesInMandelbrot(x,y,WIDTH,HEIGHT,ZOOM_FACTOR,OFFSET={x:0,y:0}){
+    let zoom = ZOOM_FACTOR * 200;
+    return {
+        x: (x - WIDTH * 0.5) / zoom - OFFSET.x,
+        y: (HEIGHT * 0.5 - y) / zoom + OFFSET.y
+    };
+}
+
 function addComplex(A,B){
     return {x:A.x+B.x, y:A.y+B.y};
 }
@@ -195,7 +203,7 @@ function drawMandelbrot(WIDTH,HEIGHT,ZOOM_FACTOR,ITERATIONS,ESCAPE,OFFSET,COLORS
         let x = i%WIDTH;
         let y = Math.floor(i/WIDTH);
         //performance.mark('mandelbrot-begin');
-        let iteration = isInMandelbrotSet(scaledPixelCoordinates(x,y,ZOOM_FACTOR,OFFSET),ITERATIONS,ESCAPE);
+        let iteration = isInMandelbrotSet(scaledPxielCoordinatesInMandelbrot(x,y,WIDTH,HEIGHT,ZOOM_FACTOR,OFFSET),ITERATIONS,ESCAPE);
         //performance.mark('mandelbrot-end');
         //performance.measure('mandelbrot', 'mandelbrot-begin', 'mandelbrot-end');
         

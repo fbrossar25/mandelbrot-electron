@@ -12,6 +12,7 @@ npm start
   - [x] HSL
   - [x] HSV
   - [x] Black & White
+  - [ ] Continuous smooth coloring
 - [x] Controls to affect mandelbrot set
   - [x] Zoom
   - [x] Move
@@ -19,6 +20,7 @@ npm start
 - [ ] Optimisation
   - [x] Formula
   - [x] Pixels manipulation instead of fillRect
+  - [ ] Use distance estimates algorithm
   - [ ] Redraw only what's needed when moving on X and Y axis
   - [ ] Multithreading
 - [ ] Save image
