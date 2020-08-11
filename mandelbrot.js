@@ -118,17 +118,41 @@ function getColorFunction(COLORS){
     }
 }
 
+function logPerformance(){
+    ['draw'/*,'mandelbrot','pixel'*/].forEach(name => {
+        let entries = performance.getEntriesByName(name);
+        let millis = 0;
+        for(const entry of entries){
+            millis += entry.duration;
+        }
+        console.log(`${name} : ${millis / 1000}s`);
+    });
+    performance.clearMarks();
+    performance.clearMeasures();
+}
+
 function drawMandelbrot(WIDTH,HEIGHT,ZOOM_FACTOR,ITERATIONS,ESCAPE,OFFSET,COLORS,canvas){
+    performance.mark('draw-begin');
     canvas.width = WIDTH;
     canvas.height = HEIGHT;
     let ctx = canvas.getContext("2d");
     let colorFct = getColorFunction(COLORS);
     let img = ctx.createImageData(WIDTH,HEIGHT);
-    for(let x=0; x < WIDTH; x++) {
-        for(let y=0; y < HEIGHT; y++) {
+    for(let y=0; y < HEIGHT; y++) {
+        for(let x=0; x < WIDTH; x++) {
+            //performance.mark('mandelbrot-begin');
             let iteration = isInMandelbrotSet(scaledPixelCoordinates(x,y,ZOOM_FACTOR,OFFSET),ITERATIONS,ESCAPE);
+            //performance.mark('mandelbrot-end');
+            //performance.measure('mandelbrot', 'mandelbrot-begin', 'mandelbrot-end');
+
+            //performance.mark('pixel-begin');
             setPixel(x,y,img,colorFct(iteration,ITERATIONS));
-        } 
+            //performance.mark('pixel-end');
+            //performance.measure('pixel', 'pixel-begin', 'pixel-end');
+        }
     }
     ctx.putImageData(img,0,0);
+    performance.mark('draw-end');
+    performance.measure('draw', 'draw-begin', 'draw-end');
+    logPerformance();
 }
