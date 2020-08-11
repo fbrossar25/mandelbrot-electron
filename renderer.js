@@ -80,6 +80,9 @@ function zoomIn(){
 
 function zoomOut(){
     currentConfig.ZOOM_FACTOR -= 50;
+    if(currentConfig.ZOOM_FACTOR < 1){
+        currentConfig.ZOOM_FACTOR = 1;
+    }
     draw();
 }
 
@@ -110,6 +113,9 @@ function moreIterations(){
 
 function lessIterations(){
     currentConfig.ITERATIONS -= 10;
+    if(currentConfig.ITERATIONS < 1){
+        currentConfig.ITERATIONS = 1;
+    }
     draw();
 }
 
