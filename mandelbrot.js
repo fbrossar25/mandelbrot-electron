@@ -16,12 +16,16 @@ function mulComplex(A,B){
     };
 }
 
+function checkDivergency(A, ESCAPE){
+    return (A.x*A.x) + (A.y*A.y) > ESCAPE;
+}
+
 function isInMandelbrotSet(C, ITERATIONS, ESCAPE) {
     let Zprevious = {x:C.x,y:C.y};
     let Z = {x:0, y:0};
     for(let i = 0; i < ITERATIONS; i++) {
         Z = addComplex(mulComplex(Zprevious, Zprevious),C);
-        if (Z.x*Z.y >= ESCAPE){
+        if (checkDivergency(Z, ESCAPE)){
             return i;
         }
         Zprevious = {x: Z.x, y:Z.y};

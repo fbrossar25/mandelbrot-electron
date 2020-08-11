@@ -6,7 +6,7 @@ const defaultConfig = {
     canvas: getEID("mainCanvas"),
     HEIGHT: 500,
     WIDTH: 500,
-    ESCAPE: 5, //For divergency check
+    ESCAPE: 2*2, //For divergency check
     ITERATIONS: 100,
     ZOOM_FACTOR: 200,
     OFFSET: {x:1.5,y:2.0},

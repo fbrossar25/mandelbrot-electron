@@ -24,3 +24,4 @@ npm start
 - [ ] Save image
 - [x] Make live draw optional (draw immediately at each modification)
 - [ ] Distribution packages (at least Windows)
+- [ ] Draw image while working
