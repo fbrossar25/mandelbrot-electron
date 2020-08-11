@@ -41,17 +41,25 @@ function setPixel(x,y,img,color){
     img.data[off+3] = color.a;
 }
 
+const GRAYS = Array(256);
+for(let i=0; i<256; i++){
+    GRAYS[i] = {r:i,g:i,b:i,a:255};
+}
+
+const BLACK = GRAYS[0];
+const WHITE = GRAYS[255];
+
 function bwColor(n, max){
     if(n < max){
-        return {r:255,g:255,b:255,a:255};
+        return WHITE;
     }else{
-        return {r:0,g:0,b:0,a:255};
+        return BLACK;
     }
 }
 
 function grayscaleColor(n, max){
     const gray = Math.floor((1.0 - (n/max)) * 255);
-    return {r:gray,g:gray,b:gray,a:255};
+    return GRAYS[gray];
 }
 
 /**
@@ -67,6 +75,9 @@ function grayscaleColor(n, max){
 * @return  any             The RGB representation
 */
 function hsvToRgb(h, s, v) {
+    if(h === 1.0){
+        return BLACK;
+    }
     var r, g, b;
     
     var i = Math.floor(h * 6);
