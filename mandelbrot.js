@@ -88,13 +88,13 @@ function hsvToRgb(h, s, v) {
     if(h === 1.0){
         return BLACK;
     }
-    var r, g, b;
+    let r, g, b;
     
-    var i = Math.floor(h * 6);
-    var f = h * 6 - i;
-    var p = v * (1 - s);
-    var q = v * (1 - f * s);
-    var t = v * (1 - (1 - f) * s);
+    let i = Math.floor(h * 6);
+    let f = h * 6 - i;
+    let p = v * (1 - s);
+    let q = v * (1 - f * s);
+    let t = v * (1 - (1 - f) * s);
     
     switch (i % 6) {
         case 0: r = v, g = t, b = p; break;
@@ -108,19 +108,61 @@ function hsvToRgb(h, s, v) {
     return {r:r * 255, g:g * 255, b:b * 255, a:255};
 }
 
+
+function hue2rgb(p, q, t) {
+    if (t < 0) t += 1;
+    if (t > 1) t -= 1;
+    if (t < 1/6) return p + (q - p) * 6 * t;
+    if (t < 1/2) return q;
+    if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+    return p;
+}
+
+/**
+* Converts an HSL color value to RGB. Conversion formula
+* adapted from http://en.wikipedia.org/wiki/HSL_color_space.
+* Assumes h, s, and l are contained in the set [0, 1] and
+* returns r, g, and b in the set [0, 255].
+* Credits to Github mjackson : https://gist.github.com/mjackson
+*
+* @param   Number  h       The hue
+* @param   Number  s       The saturation
+* @param   Number  l       The lightness
+* @return  Array           The RGB representation
+*/
+function hslToRgb(h, s, l) {
+    if(h === 1.0){
+        return BLACK;
+    }
+    let r, g, b;
+    if (s == 0) {
+        r = g = b = l; // achromatic
+    } else {
+        let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        let p = 2 * l - q;
+        r = hue2rgb(p, q, h + 1/3);
+        g = hue2rgb(p, q, h);
+        b = hue2rgb(p, q, h - 1/3);
+    }
+    
+    return {r:r * 255, g:g * 255, b:b * 255, a:255};
+}
+
 function getColorFunction(COLORS){
+    const saturation = typeof COLORS.saturation === 'number'
+    && COLORS.saturation <= 1.0
+    && COLORS.saturation >= 0.0
+    ? COLORS.saturation
+    : 0.5;
+    const value = typeof COLORS.value === 'number'
+    && COLORS.value <= 1.0
+    && COLORS.value >= 0.0
+    ? COLORS.value
+    : 0.5;
     if(COLORS.type === 'HSV'){
-        const saturation = typeof COLORS.saturation === 'number'
-            && COLORS.saturation <= 1.0
-            && COLORS.saturation >= 0.0
-            ? COLORS.saturation
-            : 0.5;
-        const value = typeof COLORS.value === 'number'
-            && COLORS.value <= 1.0
-            && COLORS.value >= 0.0
-            ? COLORS.value
-            : 0.5;
         return (n,max) => hsvToRgb(n/max,saturation,value);
+    }else if(COLORS.type === 'HSL'){
+        return (n,max) => hslToRgb(n/max,saturation,value);
     }else if(COLORS.type === 'GRAYSCALE'){
         return grayscaleColor;
     }else{
@@ -156,7 +198,7 @@ function drawMandelbrot(WIDTH,HEIGHT,ZOOM_FACTOR,ITERATIONS,ESCAPE,OFFSET,COLORS
         let iteration = isInMandelbrotSet(scaledPixelCoordinates(x,y,ZOOM_FACTOR,OFFSET),ITERATIONS,ESCAPE);
         //performance.mark('mandelbrot-end');
         //performance.measure('mandelbrot', 'mandelbrot-begin', 'mandelbrot-end');
-
+        
         //performance.mark('pixel-begin');
         setPixel(i*4,img,colorFct(iteration,ITERATIONS));
         //performance.mark('pixel-end');

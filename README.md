@@ -7,7 +7,7 @@ npm start
  - x -> add 10 iterations (Redraw from scratch)
 
 # TODO
-- [ ] Colors from iterations
+- [x] Colors from iterations
   - [x] Grayscale
   - [x] HSL
   - [x] HSV
@@ -17,7 +17,7 @@ npm start
   - [x] Move
   - [x] Change parameters
 - [ ] Optimisation
-  - [ ] Formula (possible ?)
+  - [x] Formula
   - [x] Pixels manipulation instead of fillRect
   - [ ] Redraw only what's needed when moving on X and Y axis
   - [ ] Multithreading
