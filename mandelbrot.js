@@ -29,26 +29,25 @@ function checkDivergency(A, ESCAPE){
 }
 
 function isInMandelbrotSet(C, ITERATIONS, ESCAPE) {
-    let Zprevious = {x:C.x,y:C.y};
-    let Z = {x:0, y:0};
+    const Zprevious = {x:C.x,y:C.y};
+    const Z = {x:0, y:0};
     let x2, y2;
     for(let i = 0; i < ITERATIONS; i++) {
         x2 = Zprevious.x * Zprevious.x;
         y2 = Zprevious.y * Zprevious.y;
-        Z = {
-            x: x2 - y2 + C.x,
-            y: 2 * Zprevious.x * Zprevious.y + C.y
-        };
+        Z.x = x2 - y2 + C.x,
+        Z.y = (Zprevious.x + Zprevious.x) * Zprevious.y + C.y;
         if(x2 + y2 > ESCAPE){
             return i;
         }
-        Zprevious = {x: Z.x, y:Z.y};
+        Zprevious.x = Z.x;
+        Zprevious.y = Z.y;
     }
     return ITERATIONS;
 }
 
 function setPixel(x,y,img,color){
-    let off = (y * img.width + x) * 4;
+    const off = (y * img.width + x) * 4;
     setPixel(off, img, color);
 }
 
@@ -98,11 +97,11 @@ function hsvToRgb(h, s, v) {
     }
     let r, g, b;
     
-    let i = Math.floor(h * 6);
-    let f = h * 6 - i;
-    let p = v * (1 - s);
-    let q = v * (1 - f * s);
-    let t = v * (1 - (1 - f) * s);
+    const i = Math.floor(h * 6);
+    const f = h * 6 - i;
+    const p = v * (1 - s);
+    const q = v * (1 - f * s);
+    const t = v * (1 - (1 - f) * s);
     
     switch (i % 6) {
         case 0: r = v, g = t, b = p; break;
@@ -146,8 +145,8 @@ function hslToRgb(h, s, l) {
     if (s == 0) {
         r = g = b = l; // achromatic
     } else {
-        let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-        let p = 2 * l - q;
+        const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        const p = 2 * l - q;
         r = hue2rgb(p, q, h + 1/3);
         g = hue2rgb(p, q, h);
         b = hue2rgb(p, q, h - 1/3);
@@ -195,15 +194,16 @@ function drawMandelbrot(WIDTH,HEIGHT,ZOOM_FACTOR,ITERATIONS,ESCAPE,OFFSET,COLORS
     performance.mark('draw-begin');
     canvas.width = WIDTH;
     canvas.height = HEIGHT;
-    let ctx = canvas.getContext("2d");
-    let colorFct = getColorFunction(COLORS);
-    let img = ctx.createImageData(WIDTH,HEIGHT);
-    let nPixels = WIDTH*HEIGHT;
+    const ctx = canvas.getContext("2d");
+    const colorFct = getColorFunction(COLORS);
+    const img = ctx.createImageData(WIDTH,HEIGHT);
+    const nPixels = WIDTH*HEIGHT;
+    let x,y,iteration;
     for(let i=0; i < nPixels; i++) {
-        let x = i%WIDTH;
-        let y = Math.floor(i/WIDTH);
+        x = i%WIDTH;
+        y = Math.floor(i/WIDTH);
         //performance.mark('mandelbrot-begin');
-        let iteration = isInMandelbrotSet(scaledPxielCoordinatesInMandelbrot(x,y,WIDTH,HEIGHT,ZOOM_FACTOR,OFFSET),ITERATIONS,ESCAPE);
+        iteration = isInMandelbrotSet(scaledPxielCoordinatesInMandelbrot(x,y,WIDTH,HEIGHT,ZOOM_FACTOR,OFFSET),ITERATIONS,ESCAPE);
         //performance.mark('mandelbrot-end');
         //performance.measure('mandelbrot', 'mandelbrot-begin', 'mandelbrot-end');
         

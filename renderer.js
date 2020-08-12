@@ -25,12 +25,12 @@ let configInit = false;
 const currentConfig = {};
 
 function drawCenter(){
-    let ctx = currentConfig.canvas.getContext("2d");
-    let width = currentConfig.canvas.width;
-    let height = currentConfig.canvas.height;
-    let length = Math.floor(Math.min(width, height) / 20);
-    let x = width / 2;
-    let y = height / 2;
+    const ctx = currentConfig.canvas.getContext("2d");
+    const width = currentConfig.canvas.width;
+    const height = currentConfig.canvas.height;
+    const length = Math.floor(Math.min(width, height) / 20);
+    const x = width / 2;
+    const y = height / 2;
     ctx.strokeStyle = "#FF0000";
     ctx.moveTo(x,y-length);
     ctx.lineTo(x,y+length);

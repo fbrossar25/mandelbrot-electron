@@ -20,6 +20,7 @@ npm start
 - [ ] Optimisation
   - [x] Formula
   - [x] Pixels manipulation instead of fillRect
+  - [x] Use same object in mandelbrot algorithm
   - [ ] Use distance estimates algorithm
   - [ ] Redraw only what's needed when moving on X and Y axis
   - [ ] Multithreading
